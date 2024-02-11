@@ -307,23 +307,3 @@ sampbias_plot <- marine_sampbias_plot + terrestrial_sampbias_plot + plot_layout(
 print(sampbias_plot)
 ```
 
-
-```{r}
-aus_sa <- fig4_plot_function_sampbias(ausq1, ausq1$Marine_sampbias, ausq1$n_occ_marine, "Marine", "#E41A1C", "Australs") + theme(axis.title.x = element_blank())
-mar_sa <- fig4_plot_function_sampbias(marq1, marq1$Marine_sampbias, marq1$n_occ_marine, "Marine", "#4DAF4A", "Marquesas") + theme(axis.title.x = element_blank())
-tua_sa <- fig4_plot_function_sampbias(tuaq1, tuaq1$Marine_sampbias, tuaq1$n_occ_marine, "Marine", "#FF7F00", "Tuamotu") 
-gam_sa <- fig4_plot_function_sampbias(gamq1, gamq1$Marine_sampbias, gamq1$n_occ_marine, "Marine", "#377EB8", "Gambier") + theme(axis.title.x = element_blank())
-
-
-soc_sa_t <- fig4_plot_function_sampbias(socq1, socq1$Terrestrial_sampbias, socq1$n_occ_terrestrial, "Terrestrial", "#984EA3", "Society") + theme(axis.title.y = element_blank()) + theme(axis.title.x = element_blank())
-aus_sa_t <- fig4_plot_function_sampbias(ausq1, ausq1$Terrestrial_sampbias, ausq1$n_occ_terrestrial, "Terrestrial", "#E41A1C", "Australs") + theme(axis.title.y = element_blank()) + theme(axis.title.x = element_blank())
-mar_sa_t <- fig4_plot_function_sampbias(marq1, marq1$Terrestrial_sampbias, marq1$n_occ_terrestrial, "Terrestrial", "#4DAF4A", "Marquesas") + theme(axis.title.y = element_blank()) + theme(axis.title.x = element_blank())
-tua_sa_t <- fig4_plot_function_sampbias(tuaq1, tuaq1$Terrestrial_sampbias, tuaq1$n_occ_terrestrial, "Terrestrial", "#FF7F00", "Tuamotu") + theme(axis.title.y = element_blank())
-gam_sa_t <- fig4_plot_function_sampbias(gamq1, gamq1$Terrestrial_sampbias, gamq1$n_occ_terrestrial, "Terrestrial", "#377EB8", "Gambier") + theme(axis.title.y = element_blank()) + theme(axis.title.x = element_blank())
-
-library(patchwork)
-sampbias_plot <- aus_sa + aus_sa_t + gam_sa + gam_sa_t + mar_sa + mar_sa_t + soc_sa + soc_sa_t + tua_sa + tua_sa_t + plot_layout(guides = "collect", ncol = 2, nrow = 5)
-
-
-```
-
