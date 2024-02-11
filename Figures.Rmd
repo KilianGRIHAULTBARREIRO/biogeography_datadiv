@@ -1,0 +1,329 @@
+---
+title: "Figures"
+author: "Kilian"
+date: "2024-02-10"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This document summarize the figures which we have focused on, I leave everything in .Rmd and will maybe switch each function in a separate .R file.
+
+# Libraries
+```{r}
+library(tidyverse)
+library(cowplot)
+library(RColorBrewer)
+library(ggrepel)
+library(patchwork)
+```
+
+
+# Data needed :
+```{r}
+working_dataset <- read.csv2(here("./data/dataset_V5.csv"))
+atolls <- read.csv2(here("./data/atolls.csv"))
+```
+
+
+## Shapefile project, will be needed from 3th figure
+```{r}
+shp <- sf::st_read(here("./data/GEOGRAPHIE_DES_ATOLLS")) %>% #Not on Github for the moment, its in the GEOGRAPHIE_DES_ATOLLS file in the Biogeography Kilian
+  sf::st_transform(crs = 4326) %>% 
+  sf::st_make_valid()  %>% 
+  dplyr::mutate(ILE = ifelse(OBJECTID %in% c(24733, 24734), "MOTU ONE (MAR)", ILE)) %>% #The shapefile does not distinct Motu One from Society and Marquesas archipelagos.
+  dplyr::left_join(atolls, by = join_by(ILE)) # To add Archipelagos
+```
+
+
+# FIGURE 1 : Make the Sankey diagram
+```{r}
+# A connection data frame is a list of flows with intensity for each flow
+links <- data.frame(
+  source=c( "Animal : 2.98e+05", "Animal : 2.98e+05", "After 1950 : 2.77e+05", "After 1950 : 2.77e+05", "Presence : 2.77e+05", "Presence : 2.77e+05", "Records : 2.76e+05", "Records : 2.76e+05", "Unique : 1.69e+05", "Unique : 1.69e+05", "Habitat : 1.56e+05", "Habitat : 1.56e+05", "Habitat : 1.56e+05"), 
+  
+  target=c( "After 1950 : 2.77e+05", "Before 1950 : 2.1e+04", "Presence : 2.77e+05", "Absence data : 2e+02", "Records : 2.76e+05", "Invalid recording method : 2e+02", "True duplicates : 1.07e+05", "Unique : 1.69e+05","Habitat : 1.56e+05", "No habitat : 1.29e+04", "Marine", "Terrestrial", "Others"), 
+  
+  value=c(0.277 , 0.02, 0.276,  0.001, 0.275, 0.001, 0.107, 0.169, 0.156, 0.013, 0.11, 0.01, 0.036)
+  )
+ 
+# From these flows we need to create a node data frame: it lists every entities involved in the flow
+nodes <- data.frame(
+  name=c(as.character(links$source), 
+  as.character(links$target)) %>% unique()
+)
+ 
+# With networkD3, connection must be provided using id, not using real name like in the links dataframe.. So we need to reformat it.
+links$IDsource <- match(links$source, nodes$name)-1 
+links$IDtarget <- match(links$target, nodes$name)-1
+
+nodes$group <- as.factor(c( "A", "A", "A", "A", "A", "A", "B", "B", "B", "B", "B", "A", "A", "B")) 
+
+links$group <- as.factor(c( "a","b", "a", "b", "a", "b", "b", "a", "a", "b", "a", "a", "b"))
+
+my_color <- 'd3.scaleOrdinal() .domain(["a","b","A","B"]) .range(["#fdc30a","steelblue", "#daa520" ,"#4a9ac6"])'
+
+# Make the Network
+p <- networkD3::sankeyNetwork(Links = links, Nodes = nodes,
+              Source = "IDsource", Target = "IDtarget",
+              Value = "value", colourScale=my_color, LinkGroup="group", NodeGroup="group", NodeID = "name", 
+              sinksRight=FALSE, fontSize = 13, width = 1000, height = 200, nodeWidth = 5, nodePadding = 20)
+p
+
+
+# save the widget
+# library(htmlwidgets)
+# saveWidget(p, file=paste0( getwd(), "/sankeyBasic1.html"))
+```
+
+
+# FIGURE 2 : Over and under representation.
+```{r}
+plot_ideal_sampling <- function(data, habitat, occurrence_threshold, total_species) {
+  # Filtrer les données en fonction de l'habitat spécifié
+  filtered_data <- data %>%
+    filter(Habitat == habitat)
+  
+  # Résumé des données en regroupant par archipel et niveau taxonomique
+  summary_data <- filtered_data %>%
+    group_by(Archipel, phylum) %>% 
+    summarise(
+      nbocc = n(),
+      idealsampling = n() * n_distinct(ScientificName) / total_species,
+      .groups = 'drop'
+    ) %>%
+    mutate(Difference = idealsampling - n()) %>%
+    filter(!is.na(nbocc) & nbocc >= occurrence_threshold) %>%
+    arrange(Archipel, Difference) %>% 
+    mutate(bar_order = ifelse(Difference > 0, "Positive", "Negative"))
+  
+  # Créer le graphique
+  ggplot(summary_data, aes(x = fct_reorder(phylum, Difference), y = asinh(Difference))) + 
+    geom_bar(stat = "identity", aes(fill = bar_order), position = "stack") +
+    scale_fill_manual(values = c("Positive" = "green", "Negative" = "red"), name = "Legend Name") +
+    coord_flip() + 
+    labs(title = "Difference from Ideal Sampling",
+         x = "Phylum",  # Modifier le label de l'axe x
+         y = "Occurrences") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+    facet_wrap(~ Archipel)
+}
+
+# Exemple d'utilisation de la fonction avec le niveau taxonomique "phylum"
+mar <- plot_ideal_sampling(working_dataset, habitat = "Marine", occurrence_threshold = 100, total_species = 5738)
+
+ter <- plot_ideal_sampling(working_dataset, habitat = "Terrestrial", occurrence_threshold = 10, total_species = 980)
+
+cowplot::plot_grid(mar, ter, nrow = 2)
+```
+
+
+# Figure 3
+```{r}
+pal <- wesanderson::wes_palette("Zissou1", 100, type = "continuous")
+colors <- RColorBrewer::brewer.pal(5, "Set1") 
+labels = c("Australs", "Gambier", "Marquesas", "Society", "Tuamotu")
+
+# PANEL A : Spatial distribution (you need to load shp file which is in GEOGRAPHIE DES ATOLLS)
+fig3_panelA <- function(dataset, habitat, n_grid, shp_data) {
+  
+  dataset <- dataset %>%
+    filter(Habitat == habitat) %>% 
+    sf::st_as_sf(coords = c("decimalLongitude", "decimalLatitude"), crs = 4326)
+  
+  grid <- shp %>% 
+    sf::st_make_grid(n = c(n_grid, n_grid)) %>% 
+    sf::st_as_sf() %>% 
+    mutate(grid_id = 1:n())%>%
+    sf::st_join(dataset) %>%
+    group_by(grid_id) %>%
+    summarize(Occurrences = n()) 
+
+  gg <- ggplot() +
+    geom_sf(data = grid, aes(fill = log(Occurrences)), color = NA) +
+    scale_fill_gradientn(colours = pal, limits = c(0,10)) +
+    geom_sf(data = shp, alpha = 0.01, color = "white") +
+    labs(title = "",
+      x = "Longitude",
+      y = "Latitude") +
+    theme_bw() +
+    theme(axis.text.x = element_text(color = "black", size = 12),  
+        axis.text.y = element_text(color = "black", size = 12),
+        axis.title.x = element_text(size = 15), axis.title.y = element_text(size = 15))
+  
+  return(gg)
+  }
+
+## PANEL B : Violin distribution 
+fig3_panelB <- function(dataset, habitat) {
+  
+  dataset <- dataset %>%
+    filter(Habitat == habitat) %>%
+    dplyr::group_by(Archipel, ILE) %>%
+    summarise(n_occ = n(),
+              n_species = n_distinct(ScientificName))
+    
+    
+  gg <- ggplot(data = dataset, aes(x = log10(n_occ+1), y = Archipel, colour = Archipel)) +
+    geom_point(show.legend = FALSE) +
+    geom_violin(aes(fill = Archipel), alpha = 0.3, show.legend = FALSE) +
+    labs(title = "",
+         x = "Occurrences (log)",
+         y = "Archipelagos") +
+    scale_color_manual(values = colors, labels = labels) +
+    scale_fill_manual(values = colors, labels = labels) +
+    scale_y_discrete(labels = labels) +
+    ggrepel::geom_text_repel(aes(label = ILE), size = 3, color = "black") +
+    theme_bw() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, color = "black", size = 12),  
+        axis.text.y = element_text(angle = 45, hjust = 1, color = "black", size = 12),
+        axis.title.x = element_text(size = 15), axis.title.y = element_text(size = 15)) + 
+    xlim(0,5)
+  
+  return(gg)
+  }
+
+```
+
+# Figure 3 : FULL (Might take a little bit of time ~5min with n_grid = 50)
+```{r}
+a <- fig3_panelA(working_dataset, "Marine", 50, shp)
+b <- fig3_panelA(working_dataset, "Terrestrial", 50, shp) + theme(axis.title.y = element_blank(), axis.text.y = element_blank())
+
+occurrences_mar <- fig3_panelB(working_dataset, "Marine")
+occurrences_terr <- fig3_panelB(working_dataset, "Terrestrial") + 
+  theme(axis.title.y = element_blank(), axis.text.y = element_blank())
+
+combined_plot <- cowplot::plot_grid(a, b, occurrences_mar, occurrences_terr, labels = c("Marine", "Terrestrial"), ncol = 2, nrow = 2) +
+  theme(legend.position = 'top') 
+
+
+print(combined_plot)
+```
+
+
+# Figure 4 (You can change this code, I've put mine to generate rarefaction curves based on occurrences,but I guess Laura will modify it)
+```{r}
+generate_rarefaction_curve <- function(dataset, threshold_percentage, habitat) {
+
+  occurrences_by_species <- dataset %>%
+    filter(Habitat == habitat) %>% #Archipel == archipel_name, 
+    group_by(ScientificName, Archipel) %>%
+    summarise(NombreOccurrences = n(),
+              NombreEspeces = n_distinct(ScientificName))
+  
+  
+  data_cumulative <- occurrences_by_species %>%
+    arrange(NombreOccurrences) %>%
+    group_by(Archipel) %>%
+    mutate(NombreEspecesCumule = cumsum(NombreEspeces),
+           NombreOccurrencesCumule = cumsum(NombreOccurrences))
+
+  # Calcul du pourcentage d'espèces total
+  total_species <- sum(data_cumulative$NombreEspeces)
+  threshold <- total_species * threshold_percentage  # Seuil en fonction du pourcentage spécifié
+
+  # Trouver la première occurrence où le nombre cumulé d'espèces dépasse le seuil de pourcentage spécifié
+  first_occurrence_above_threshold <- data_cumulative %>%
+    group_by(Archipel) %>%
+    filter(NombreEspecesCumule >= threshold) %>% 
+    slice(1)  # Récupérer la première ligne qui dépasse le seuil
+
+  threshold_occurrence <- first_occurrence_above_threshold$NombreOccurrencesCumule  # Récupérer le nombre d'occurrences correspondant au seuil
+
+  table_cumulative <- data.frame(NombreOccurrencesCumule = data_cumulative$NombreOccurrencesCumule,
+                                 NombreEspecesCumule = data_cumulative$NombreEspecesCumule,
+                                 Archipel = data_cumulative$Archipel)
+
+  # Utilisation de ggplot pour créer le graphique
+  p <- ggplot(table_cumulative, aes(x = NombreOccurrencesCumule, y = NombreEspecesCumule, color = Archipel)) +
+    geom_line(show.legend = FALSE) +
+    labs(title = "",
+         x = "",
+         y = "") +
+    scale_color_manual(values = palette_archipel) +
+    theme_bw() + xlim(0, 90000) + ylim(0,4500) 
+
+  # Ajouter la ligne verticale au graphique
+
+  
+  #diviser les facets
+  p <- p + facet_wrap(facets = ~Archipel, nrow = 1)
+  
+  p <- p + geom_vline(xintercept = threshold_occurrence, linetype = "dashed", color = "red") +
+     annotate("text", x = 1.4 * threshold_occurrence, y = 0.95* max(data_cumulative$NombreEspecesCumule), label =  threshold_occurrence, vjust = -1)
+  
+  return(p)  # Retourner le graphique modifié
+}
+
+palette_archipel = c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00")
+
+# global <- generate_rarefaction_curve(working_dataset, "All", "black", 0.75)
+acc_cur_marine <- generate_rarefaction_curve(working_dataset,  0.75, "Marine") #"#984EA3",
+acc_cur_terr <- generate_rarefaction_curve(working_dataset,  0.75, "Terrestrial")
+
+cowplot::plot_grid(acc_cur_marine, acc_cur_terr, labels = c("Marine", "Terrestrial") ,nrow = 2)
+```
+
+
+# Figure 5 : Sampbias 
+```{r}
+data_sampbias <- read.csv2("C:/Users/Kilian/Desktop/Biogeography Kilian/Sample_bias_richness_q1.csv") # Sampbias package data stored in the file
+
+fig5_plot <- function(data, sampbias, N_species, type) {
+  
+  # Fit linear model
+  fit <- lm(log(N_species + 1) ~ sampbias, data = data)
+  
+  # Define color palette
+  palette_archipel <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00")
+  
+  ggplot(data = data, aes(x = log(49 * sampbias + 1), y = log(N_species + 1))) +
+    geom_point(aes(color = Archipel), show.legend = FALSE) +
+    geom_smooth(method = lm, aes(color = Archipel, fill = Archipel), size = 1, linetype = "solid", alpha = 0.5, se = TRUE) +
+    labs(title = "",
+         x = "Expected occurrences (log)",
+         y = "Observed occurrences (log)") +
+    ggrepel::geom_text_repel(aes(label = ILE), size = 3, color = "black") +
+    scale_color_manual(values = palette_archipel) +
+    scale_fill_manual(values = palette_archipel) +
+    theme(axis.text.x = element_text(size = 15), axis.text.y = element_text(size = 15), axis.title.y = element_text(size = 20)) +
+    theme_bw() + xlim(0, 10) + ylim(0, 10) +
+    facet_wrap(~ Archipel, scales = "free") +
+    ggpubr::stat_regline_equation(label.x = 3, label.y = 10)
+
+}
+
+marine_sampbias_plot <- fig5_plot(data_sampbias, data_sampbias$Marine_sampbias, data_sampbias$n_occ_marine, "Marine") + 
+  theme(axis.title.x = element_blank())
+terrestrial_sampbias_plot <- fig5_plot(data_sampbias, data_sampbias$Terrestrial_sampbias, data_sampbias$n_occ_terrestrial, "Marine") + 
+  theme(axis.title.x = element_blank())
+
+sampbias_plot <- marine_sampbias_plot + terrestrial_sampbias_plot + plot_layout(guides = "collect", nrow = 2)
+
+print(sampbias_plot)
+```
+
+
+```{r}
+aus_sa <- fig4_plot_function_sampbias(ausq1, ausq1$Marine_sampbias, ausq1$n_occ_marine, "Marine", "#E41A1C", "Australs") + theme(axis.title.x = element_blank())
+mar_sa <- fig4_plot_function_sampbias(marq1, marq1$Marine_sampbias, marq1$n_occ_marine, "Marine", "#4DAF4A", "Marquesas") + theme(axis.title.x = element_blank())
+tua_sa <- fig4_plot_function_sampbias(tuaq1, tuaq1$Marine_sampbias, tuaq1$n_occ_marine, "Marine", "#FF7F00", "Tuamotu") 
+gam_sa <- fig4_plot_function_sampbias(gamq1, gamq1$Marine_sampbias, gamq1$n_occ_marine, "Marine", "#377EB8", "Gambier") + theme(axis.title.x = element_blank())
+
+
+soc_sa_t <- fig4_plot_function_sampbias(socq1, socq1$Terrestrial_sampbias, socq1$n_occ_terrestrial, "Terrestrial", "#984EA3", "Society") + theme(axis.title.y = element_blank()) + theme(axis.title.x = element_blank())
+aus_sa_t <- fig4_plot_function_sampbias(ausq1, ausq1$Terrestrial_sampbias, ausq1$n_occ_terrestrial, "Terrestrial", "#E41A1C", "Australs") + theme(axis.title.y = element_blank()) + theme(axis.title.x = element_blank())
+mar_sa_t <- fig4_plot_function_sampbias(marq1, marq1$Terrestrial_sampbias, marq1$n_occ_terrestrial, "Terrestrial", "#4DAF4A", "Marquesas") + theme(axis.title.y = element_blank()) + theme(axis.title.x = element_blank())
+tua_sa_t <- fig4_plot_function_sampbias(tuaq1, tuaq1$Terrestrial_sampbias, tuaq1$n_occ_terrestrial, "Terrestrial", "#FF7F00", "Tuamotu") + theme(axis.title.y = element_blank())
+gam_sa_t <- fig4_plot_function_sampbias(gamq1, gamq1$Terrestrial_sampbias, gamq1$n_occ_terrestrial, "Terrestrial", "#377EB8", "Gambier") + theme(axis.title.y = element_blank()) + theme(axis.title.x = element_blank())
+
+library(patchwork)
+sampbias_plot <- aus_sa + aus_sa_t + gam_sa + gam_sa_t + mar_sa + mar_sa_t + soc_sa + soc_sa_t + tua_sa + tua_sa_t + plot_layout(guides = "collect", ncol = 2, nrow = 5)
+
+
+```
+
