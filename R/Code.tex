@@ -1,0 +1,562 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Curation\_Filtering\_Biogeography},
+  pdfauthor={Kilian},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Curation\_Filtering\_Biogeography}
+\author{Kilian}
+\date{2024-04-06}
+
+\begin{document}
+\maketitle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(devtools)}
+\FunctionTok{library}\NormalTok{(rtaxref)}
+\FunctionTok{library}\NormalTok{(worrms)}
+\FunctionTok{library}\NormalTok{(taxize)}
+\FunctionTok{library}\NormalTok{(purrr)}
+\FunctionTok{library}\NormalTok{(data.table)}
+\CommentTok{\# library(rgbif)}
+\end{Highlighting}
+\end{Shaded}
+
+Tip: \texttt{rgbif::occ\_download} can also be used but very time
+consuming.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{file\_adress }\OtherTok{\textless{}{-}} \FunctionTok{file.path}\NormalTok{(}\StringTok{".."}\NormalTok{, }\StringTok{"Data"}\NormalTok{, }\StringTok{"00\_Raw\_data.txt"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{useful\_columns }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{21}\NormalTok{,}\DecValTok{30}\NormalTok{,}\DecValTok{39}\NormalTok{,}\DecValTok{59}\NormalTok{,}\DecValTok{60}\NormalTok{,}\DecValTok{61}\NormalTok{,}\DecValTok{81}\NormalTok{,}\DecValTok{88}\NormalTok{,}\DecValTok{89}\NormalTok{,}\DecValTok{123}\NormalTok{,}\DecValTok{130}\NormalTok{,}\DecValTok{138}\SpecialCharTok{:}\DecValTok{146}\NormalTok{,}
+                    \DecValTok{148}\NormalTok{,}\DecValTok{152}\NormalTok{,}\DecValTok{156}\NormalTok{,}\DecValTok{158}\NormalTok{,}\DecValTok{160}\NormalTok{,}\DecValTok{163}\NormalTok{,}\DecValTok{166}\NormalTok{,}\DecValTok{176}\NormalTok{,}\DecValTok{177}\NormalTok{,}\DecValTok{180}\NormalTok{,}\DecValTok{188}\NormalTok{,}\DecValTok{189}\NormalTok{)}
+
+\NormalTok{filtered\_data }\OtherTok{\textless{}{-}}\NormalTok{ data.table}\SpecialCharTok{::}\FunctionTok{fread}\NormalTok{(file\_adress, }
+                                   \AttributeTok{header =} \ConstantTok{TRUE}\NormalTok{, }
+                                   \AttributeTok{quote =} \StringTok{""}\NormalTok{, }
+                                   \AttributeTok{sep=}\StringTok{\textquotesingle{}}\SpecialCharTok{\textbackslash{}t}\StringTok{\textquotesingle{}}\NormalTok{, }
+                                   \AttributeTok{sep2 =} \StringTok{\textquotesingle{}}\SpecialCharTok{\textbackslash{}t}\StringTok{\textquotesingle{}}\NormalTok{, }
+                                   \AttributeTok{na.strings =} \FunctionTok{c}\NormalTok{(}\StringTok{""}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(kingdom }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"Animalia"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select\_if}\NormalTok{(}\SpecialCharTok{\textasciitilde{}} \SpecialCharTok{!}\FunctionTok{all}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(.))) }\SpecialCharTok{\%\textgreater{}\%} \CommentTok{\#Remove completely filled NA columns}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(useful\_columns)) }
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{curation-reliability}{%
+\section{Curation \& Reliability}\label{curation-reliability}}
+
+\hypertarget{taxonomic-checking-and-habitat.}{%
+\subsection{Taxonomic checking and
+Habitat.}\label{taxonomic-checking-and-habitat.}}
+
+We take all the species present in the dataset. We modify the
+worrms::wm\_records\_name() function to avoid an error when the specie
+name is not recognized.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{scientificName\_list }\OtherTok{\textless{}{-}} \FunctionTok{unique}\NormalTok{(filtered\_data}\SpecialCharTok{$}\NormalTok{species) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  stats}\SpecialCharTok{::}\FunctionTok{na.omit}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{worms}{%
+\subsubsection{WoRMS}\label{worms}}
+
+Worms\_filtered object is a df with all the names recognized by WoRMS,
+be aware that the computation is energy-intensive (\textasciitilde{} 87
+min for 6535 species), tip : if your device is efficient enough, try :
+furrr::future\_map() instead of purrr::map().
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{get\_worms\_records }\OtherTok{\textless{}{-}} \FunctionTok{possibly}\NormalTok{(worrms}\SpecialCharTok{::}\NormalTok{wm\_records\_name, }\AttributeTok{otherwise =} \ConstantTok{NULL}\NormalTok{)}
+
+\NormalTok{Worms\_filtered\_df }\OtherTok{\textless{}{-}}\NormalTok{ purrr}\SpecialCharTok{::}\FunctionTok{map}\NormalTok{(scientificName\_list, }\SpecialCharTok{\textasciitilde{}} \FunctionTok{get\_worms\_records}\NormalTok{(.x)[}\DecValTok{1}\NormalTok{,]) }\SpecialCharTok{\%\textgreater{}\%} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{bind\_rows}\NormalTok{() }
+\end{Highlighting}
+\end{Shaded}
+
+To avoid the computation I wrote csv files for the next 4 comparisons.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Worms\_filtered\_df }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\FunctionTok{file.path}\NormalTok{(}\StringTok{".."}\NormalTok{, }\StringTok{"Data"}\NormalTok{, }\StringTok{"01\_Worms\_Filtered\_df.csv"}\NormalTok{)) }
+\end{Highlighting}
+\end{Shaded}
+
+We keep specific columns from the data we have obtained after the WoRMS
+comparison, such as the Habitat, the valid scientific name, the taxon
+status.. We standardize the status to GBIF taxonomicStatus.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Worms\_filtered\_df }\OtherTok{\textless{}{-}}\NormalTok{ Worms\_filtered\_df }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{10}\NormalTok{,}\DecValTok{14}\SpecialCharTok{:}\DecValTok{18}\NormalTok{,}\DecValTok{21}\SpecialCharTok{:}\DecValTok{25}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{data\_source\_title =} \StringTok{"World Register of Marine Species"}\NormalTok{,}
+    \AttributeTok{status =} \FunctionTok{case\_when}\NormalTok{(}
+\NormalTok{      status }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"accepted"}\NormalTok{) }\SpecialCharTok{\textasciitilde{}} \StringTok{"ACCEPTED"}\NormalTok{,}
+\NormalTok{      status }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"taxon inquirendum"}\NormalTok{, }\StringTok{"unaccepted"}\NormalTok{, }\StringTok{"unassessed"}\NormalTok{, }\StringTok{"uncertain"}\NormalTok{, }\StringTok{"nomen dubium"}\NormalTok{, }\StringTok{"nomen nudum"}\NormalTok{, }\StringTok{"deleted"}\NormalTok{) }\SpecialCharTok{\textasciitilde{}} \StringTok{"DOUBTFUL"}\NormalTok{,}
+\NormalTok{      status }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"junior subjective synonym"}\NormalTok{, }\StringTok{"misspelling"}\NormalTok{, }\StringTok{"superseded combination"}\NormalTok{, }\StringTok{"unreplaced junior homonym"}\NormalTok{, }\StringTok{"alternative representation"}\NormalTok{) }\SpecialCharTok{\textasciitilde{}} \StringTok{"SYNONYM"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\AttributeTok{species =}\NormalTok{ scientificname) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(species))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{merge-with-original-data-15}{%
+\paragraph{Merge with original data
+(1/5)}\label{merge-with-original-data-15}}
+
+We didn't change every taxonomical rank according to the status value,
+because we assumed that if a taxonomic error happens, it would mainly
+occurs at the specie level (source : Bonnet-Lebrun 2019)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{filtered\_data }\OtherTok{\textless{}{-}}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{left\_join}\NormalTok{(filtered\_data, Worms\_filtered\_df, }\AttributeTok{by =} \StringTok{"species"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{species =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{case\_when}\NormalTok{(}
+\NormalTok{      status }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"DOUBTFUL"}\NormalTok{,}\StringTok{"SYNONYM"}\NormalTok{) }\SpecialCharTok{\textasciitilde{}}\NormalTok{ valid\_name, }\ConstantTok{TRUE} \SpecialCharTok{\textasciitilde{}}\NormalTok{ species),}
+    \AttributeTok{taxonomicStatus =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{case\_when}\NormalTok{(}
+      \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(status) }\SpecialCharTok{\&}\NormalTok{ status }\SpecialCharTok{!=}\NormalTok{ taxonomicStatus }\SpecialCharTok{\textasciitilde{}}\NormalTok{ status,}
+      \ConstantTok{TRUE} \SpecialCharTok{\textasciitilde{}}\NormalTok{ taxonomicStatus),}
+    \AttributeTok{phylum =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{coalesce}\NormalTok{(phylum.x, phylum.y), }\CommentTok{\#phylum will be filled by phylum.x except if phylum.x = NA}
+    \AttributeTok{class =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{coalesce}\NormalTok{(class.x, class.y),}
+    \AttributeTok{order =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{coalesce}\NormalTok{(order.x, order.y),}
+    \AttributeTok{family =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{coalesce}\NormalTok{(family.x, family.y),}
+    \AttributeTok{genus =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{coalesce}\NormalTok{(genus.x, genus.y)) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\FunctionTok{ends\_with}\NormalTok{(}\StringTok{".x"}\NormalTok{), }\SpecialCharTok{{-}}\FunctionTok{ends\_with}\NormalTok{(}\StringTok{".y"}\NormalTok{), }\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\StringTok{"status"}\NormalTok{, }\StringTok{"valid\_name"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{taxize}{%
+\subsubsection{Taxize}\label{taxize}}
+
+We still have unmatched/unrecognized taxa from WoRMS, that can be
+because of the marine speciality of it. Therefore we use the
+\texttt{gnr\_resolve()} function of the taxize package in order to
+retrieve those taxa, and add a source. (loop duration \textasciitilde12'
+for 1670 species)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{unmatched\_taxa }\OtherTok{\textless{}{-}}\NormalTok{ filtered\_data }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(isMarine) }\SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isFreshwater) }\SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isBrackish) }\SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isTerrestrial)) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(species) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{unique}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  stats}\SpecialCharTok{::}\FunctionTok{na.omit}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{as.list}\NormalTok{()}
+
+\NormalTok{Taxize\_filtered\_df }\OtherTok{\textless{}{-}}\NormalTok{ purrr}\SpecialCharTok{::}\FunctionTok{map}\NormalTok{(unmatched\_taxa[[}\DecValTok{1}\NormalTok{]], }\SpecialCharTok{\textasciitilde{}}\NormalTok{ taxize}\SpecialCharTok{::}\FunctionTok{gnr\_resolve}\NormalTok{(.x)[}\DecValTok{1}\NormalTok{,]) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{bind\_rows}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{species =}\NormalTok{ user\_supplied\_name) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{,}\DecValTok{6}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{merge-with-original-data-25}{%
+\paragraph{Merge with original data
+(2/5)}\label{merge-with-original-data-25}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Taxize\_filtered\_df }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\FunctionTok{file.path}\NormalTok{(}\StringTok{".."}\NormalTok{, }\StringTok{"Data"}\NormalTok{, }\StringTok{"02\_Taxize\_filtered\_df.csv"}\NormalTok{))}
+
+\NormalTok{filtered\_data }\OtherTok{\textless{}{-}}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{left\_join}\NormalTok{(filtered\_data, Taxize\_filtered\_df, }\AttributeTok{by =} \StringTok{"species"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{data\_source\_title =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{coalesce}\NormalTok{(data\_source\_title.x, data\_source\_title.y)}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\FunctionTok{ends\_with}\NormalTok{(}\StringTok{".x"}\NormalTok{), }\SpecialCharTok{{-}}\FunctionTok{ends\_with}\NormalTok{(}\StringTok{".y"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{taxref}{%
+\subsubsection{Taxref}\label{taxref}}
+
+To get the end of Habitats informations and Biogeographical status
+duration chunk (\textasciitilde50 min/8201 species), be aware that
+Taxref API is unstable.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Taxref\_filtered\_df }\OtherTok{\textless{}{-}} 
+\NormalTok{  purrr}\SpecialCharTok{::}\FunctionTok{map}\NormalTok{(scientificName\_list, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ rtaxref}\SpecialCharTok{::}\FunctionTok{rt\_taxa\_search}\NormalTok{(}\AttributeTok{sciname =}\NormalTok{ .x)[}\DecValTok{1}\NormalTok{,]) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{bind\_rows}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"scientificName"}\NormalTok{,}\StringTok{"habitat"}\NormalTok{,}\StringTok{"pf"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\StringTok{"species"} \OtherTok{=} \StringTok{"scientificName"}\NormalTok{,}
+                \StringTok{"habitat\_taxref"} \OtherTok{=} \StringTok{"habitat"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(species)) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{distinct}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Taxref\_filtered\_df }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\FunctionTok{file.path}\NormalTok{(}\StringTok{".."}\NormalTok{, }\StringTok{"Data"}\NormalTok{, }\StringTok{"03\_Taxref\_filtered\_df.csv"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{merge-with-original-data-35}{%
+\paragraph{Merge with original data
+(3/5)}\label{merge-with-original-data-35}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{filtered\_data }\OtherTok{\textless{}{-}}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{left\_join}\NormalTok{(filtered\_data, Taxref\_filtered\_df, }\AttributeTok{by =} \StringTok{"species"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{isMarine\_taxref =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{case\_when}\NormalTok{(habitat\_taxref }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{) }\SpecialCharTok{\textasciitilde{}} \DecValTok{1}\NormalTok{, }\ConstantTok{TRUE} \SpecialCharTok{\textasciitilde{}} \ConstantTok{NA}\NormalTok{),}
+         \AttributeTok{isFresh\_taxref =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{case\_when}\NormalTok{(habitat\_taxref }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{8}\NormalTok{) }\SpecialCharTok{\textasciitilde{}} \DecValTok{1}\NormalTok{, }\ConstantTok{TRUE} \SpecialCharTok{\textasciitilde{}} \ConstantTok{NA}\NormalTok{),}
+         \AttributeTok{isTerrestrial\_taxref =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{case\_when}\NormalTok{(habitat\_taxref }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{7}\NormalTok{) }\SpecialCharTok{\textasciitilde{}} \DecValTok{1}\NormalTok{, }\ConstantTok{TRUE} \SpecialCharTok{\textasciitilde{}} \ConstantTok{NA}\NormalTok{),}
+         \AttributeTok{isBrackish\_taxref =} \FunctionTok{ifelse}\NormalTok{(habitat\_taxref }\SpecialCharTok{==} \DecValTok{6}\NormalTok{, }\DecValTok{1}\NormalTok{ ,}\ConstantTok{NA}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{isMarine =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{coalesce}\NormalTok{(isMarine, isMarine\_taxref),}
+                \AttributeTok{isFreshwater =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{coalesce}\NormalTok{(isFreshwater, isFresh\_taxref),}
+                \AttributeTok{isTerrestrial =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{coalesce}\NormalTok{(isTerrestrial, isTerrestrial\_taxref),}
+                \AttributeTok{isBrackish =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{coalesce}\NormalTok{(isBrackish, isBrackish\_taxref),}
+                \AttributeTok{biogeoStatus =}\NormalTok{ pf) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\StringTok{"isMarine\_taxref"}\NormalTok{,}\StringTok{"isFresh\_taxref"}\NormalTok{,}\StringTok{"isTerrestrial\_taxref"}\NormalTok{,}\StringTok{"isBrackish\_taxref"}\NormalTok{,}\StringTok{"pf"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{handmade-check}{%
+\subsubsection{Handmade check}\label{handmade-check}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Handmade\_filtered\_df }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\FunctionTok{file.path}\NormalTok{(}\StringTok{".."}\NormalTok{, }\StringTok{"Data"}\NormalTok{, }\StringTok{"04\_Handmade\_filtered\_df.csv"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\StringTok{"data\_source\_title"} \OtherTok{=} \StringTok{"V2"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{merge-with-filtered_data-45}{%
+\paragraph{Merge with filtered\_data
+(4/5)}\label{merge-with-filtered_data-45}}
+
+We consider WoRMS as most reliable source for habitat
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{filtered\_data }\OtherTok{\textless{}{-}}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{left\_join}\NormalTok{(filtered\_data, Handmade\_filtered\_df, }\AttributeTok{by =} \StringTok{"acceptedScientificName"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{isMarine =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{coalesce}\NormalTok{(isMarine.x, isMarine.y), }
+                \AttributeTok{isFreshwater =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{coalesce}\NormalTok{(isFreshwater.x, isFreshwater.y),}
+                \AttributeTok{isTerrestrial =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{coalesce}\NormalTok{(isTerrestrial.x, isTerrestrial.y),}
+                \AttributeTok{isBrackish =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{coalesce}\NormalTok{(isBrackish.x, isBrackish.y),}
+                \AttributeTok{data\_source\_title =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{coalesce}\NormalTok{(data\_source\_title.x, data\_source\_title.y)) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\FunctionTok{ends\_with}\NormalTok{(}\StringTok{".x"}\NormalTok{), }\SpecialCharTok{{-}}\FunctionTok{ends\_with}\NormalTok{(}\StringTok{".y"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{additional-data}{%
+\section{Additional data}\label{additional-data}}
+
+\hypertarget{institution-vs-citizen-science.}{%
+\subsection{Institution vs citizen
+science.}\label{institution-vs-citizen-science.}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{institutions\_liste }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"museum"}\NormalTok{, }\StringTok{"Museum"}\NormalTok{, }\StringTok{"Institute"}\NormalTok{, }\StringTok{"institute"}\NormalTok{, }\StringTok{"institution"}\NormalTok{,}
+                     \StringTok{"Institution"}\NormalTok{, }\StringTok{"lab"}\NormalTok{, }\StringTok{"Lab"}\NormalTok{, }\StringTok{"laboratory"}\NormalTok{, }\StringTok{"Laboratory"}\NormalTok{, }
+                     \StringTok{"university"}\NormalTok{, }\StringTok{"University"}\NormalTok{, }\StringTok{"institut"}\NormalTok{, }\StringTok{"Institut"}\NormalTok{, }
+                     \StringTok{"Fishbase"}\NormalTok{, }\StringTok{"Academy"}\NormalTok{, }\StringTok{"Museums"}\NormalTok{, }\StringTok{"Muséum"}\NormalTok{, }\StringTok{"UMS"}\NormalTok{, }
+                     \StringTok{"Observatory"}\NormalTok{, }\StringTok{"Observatories"}\NormalTok{, }\StringTok{"Center"}\NormalTok{, }\StringTok{"center"}\NormalTok{)}
+
+\NormalTok{institutionals\_names }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"European Nucleotide Archive (EMBL{-}EBI)"}\NormalTok{,}\StringTok{"MGnify"}\NormalTok{,}
+                         \StringTok{"Commonwealth Scientific and Industrial Research Organisation"}\NormalTok{,}
+                         \StringTok{"Zoologische Staatssammlung"}\NormalTok{,}\StringTok{"Senckenberg"}\NormalTok{,}
+                         \StringTok{"Senckenberg {-} CeDAMar Provider"}\NormalTok{, }\StringTok{"United States Geological Survey"}\NormalTok{,}
+                         \StringTok{"Secretariat of the Pacific Regional Environment Programme"}\NormalTok{,}
+                         \StringTok{"British Antarctic Survey"}\NormalTok{,}\StringTok{"Virginia Tech Insect Collection"}\NormalTok{, }
+                         \StringTok{"CBGP (UMR INRA, Cirad, IRD, Montpellier SupAgro)"}\NormalTok{,}
+                         \StringTok{"The International Barcode of Life Consortium"}\NormalTok{,}
+                         \StringTok{"Zoologische Staatssammlung München/Staatliche Naturwissenschaftliche Sammlungen Bayerns"}\NormalTok{)}
+
+\NormalTok{filtered\_data }\OtherTok{\textless{}{-}}\NormalTok{ filtered\_data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{sourceScore =} \FunctionTok{ifelse}\NormalTok{(}\FunctionTok{grepl}\NormalTok{(}\FunctionTok{paste}\NormalTok{(institutions\_liste, }\AttributeTok{collapse =} \StringTok{"|"}\NormalTok{), }
+\NormalTok{                                    publisher, }\AttributeTok{ignore.case =} \ConstantTok{TRUE}\NormalTok{), }
+                               \StringTok{"Institution"}\NormalTok{,}
+                              \FunctionTok{ifelse}\NormalTok{(publisher }\SpecialCharTok{\%in\%}\NormalTok{ institutionals\_names, }
+                                     \StringTok{"Institution"}\NormalTok{, }\StringTok{"citizenScience"}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{island-and-archipelagos}{%
+\subsection{Island and archipelagos}\label{island-and-archipelagos}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{shp\_file\_path }\OtherTok{\textless{}{-}} \FunctionTok{file.path}\NormalTok{(}\StringTok{".."}\NormalTok{, }\StringTok{"Data"}\NormalTok{, }\StringTok{"shp\_pf"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{shp }\OtherTok{\textless{}{-}}\NormalTok{ sf}\SpecialCharTok{::}\FunctionTok{st\_read}\NormalTok{(}\AttributeTok{dsn =}\NormalTok{ shp\_file\_path) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  sf}\SpecialCharTok{::}\FunctionTok{st\_transform}\NormalTok{(}\AttributeTok{crs =} \DecValTok{4326}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  sf}\SpecialCharTok{::}\FunctionTok{st\_make\_valid}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{ILE =} \FunctionTok{ifelse}\NormalTok{(OBJECTID }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\DecValTok{24733}\NormalTok{, }\DecValTok{24734}\NormalTok{), }\StringTok{"MOTU ONE (Mar)"}\NormalTok{, ILE)) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\StringTok{"OBJECTID"}\NormalTok{, }\StringTok{"Carto"}\NormalTok{, }\StringTok{"ILE"}\NormalTok{, }\StringTok{"geometry"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reading layer `WGS84_TraitDeCote' from data source 
+##   `C:\Users\Kilian\Documents\GitHub\biogeography_datadiv\Data\shp_pf' 
+##   using driver `ESRI Shapefile'
+## replacing null geometries with empty geometries
+## Simple feature collection with 28823 features and 10 fields (with 24 geometries empty)
+## Geometry type: GEOMETRY
+## Dimension:     XY
+## Bounding box:  xmin: -17224900 ymin: -3375330 xmax: -14889940 ymax: -870071.2
+## Projected CRS: WGS 84 / Pseudo-Mercator
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dataset\_to\_sf }\OtherTok{\textless{}{-}}\NormalTok{ sf}\SpecialCharTok{::}\FunctionTok{st\_as\_sf}\NormalTok{(filtered\_data, }
+                              \AttributeTok{coords =} \FunctionTok{c}\NormalTok{(}\StringTok{"decimalLongitude"}\NormalTok{, }\StringTok{"decimalLatitude"}\NormalTok{), }
+                              \AttributeTok{crs =} \DecValTok{4326}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  sf}\SpecialCharTok{::}\FunctionTok{st\_make\_valid}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{island-atolls-and-archipelagos}{%
+\subparagraph{Island, atolls and
+archipelagos}\label{island-atolls-and-archipelagos}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{atolls\_tuamotu\_df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{island =} \FunctionTok{toupper}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"Mataiva"}\NormalTok{, }\StringTok{"Tikehau"}\NormalTok{, }\StringTok{"Rangiroa"}\NormalTok{, }\StringTok{"Makatea"}\NormalTok{, }\StringTok{"Niau"}\NormalTok{, }\StringTok{"Kaukura"}\NormalTok{, }
+                  \StringTok{"Arutua"}\NormalTok{, }\StringTok{"Apataki"}\NormalTok{, }\StringTok{"Toau"}\NormalTok{, }\StringTok{"Aratika"}\NormalTok{, }\StringTok{"Fakarava"}\NormalTok{, }\StringTok{"Kauehi"}\NormalTok{, }
+                  \StringTok{"Raraka"}\NormalTok{, }\StringTok{"Faaite"}\NormalTok{, }\StringTok{"Katiu"}\NormalTok{, }\StringTok{"Tahanea"}\NormalTok{, }\StringTok{"Hiti"}\NormalTok{, }\StringTok{"Makemo"}\NormalTok{, }
+                  \StringTok{"Manihi"}\NormalTok{, }\StringTok{"Ahe"}\NormalTok{, }\StringTok{"Takaroa"}\NormalTok{, }\StringTok{"Takapoto"}\NormalTok{, }\StringTok{"Tikei"}\NormalTok{, }\StringTok{"Taiaro"}\NormalTok{, }
+                  \StringTok{"Tepoto sud"}\NormalTok{, }\StringTok{"Motutunga"}\NormalTok{,}\StringTok{"Anaa"}\NormalTok{, }\StringTok{"Taenga"}\NormalTok{, }\StringTok{"Takume"}\NormalTok{, }\StringTok{"Raroia"}\NormalTok{, }
+                  \StringTok{"Nihiru"}\NormalTok{, }\StringTok{"Marutea nord"}\NormalTok{, }\StringTok{"Haraiki"}\NormalTok{, }\StringTok{"Reitoru"}\NormalTok{, }\StringTok{"Rekareka"}\NormalTok{, }
+                  \StringTok{"Tauere"}\NormalTok{, }\StringTok{"Tekokota"}\NormalTok{, }\StringTok{"Hikueru"}\NormalTok{, }\StringTok{"Marokau"}\NormalTok{, }\StringTok{"Ravahere"}\NormalTok{, }
+                  \StringTok{"Amanu"}\NormalTok{, }\StringTok{"Hao"}\NormalTok{, }\StringTok{"Nengonengo"}\NormalTok{, }\StringTok{"Napuka"}\NormalTok{, }\StringTok{"Tepoto nord"}\NormalTok{, }
+                  \StringTok{"Fangatau"}\NormalTok{, }\StringTok{"Fakahina"}\NormalTok{, }\StringTok{"Pukapuka"}\NormalTok{,}\StringTok{"Tatakoto"}\NormalTok{, }\StringTok{"Pukarua"}\NormalTok{, }
+                  \StringTok{"Reao"}\NormalTok{, }\StringTok{"Manuhangi"}\NormalTok{, }\StringTok{"Paraoa"}\NormalTok{, }\StringTok{"Vairaatea"}\NormalTok{, }\StringTok{"Ahunui"}\NormalTok{, }
+                  \StringTok{"Nukutavake"}\NormalTok{, }\StringTok{"Akiaki"}\NormalTok{, }\StringTok{"Pinaki"}\NormalTok{, }\StringTok{"Vahitahi"}\NormalTok{, }\StringTok{"Hereheretue"}\NormalTok{,}
+                  \StringTok{"Anuanurunga"}\NormalTok{, }\StringTok{"Anuanuraro"}\NormalTok{, }\StringTok{"Nukutepipi"}\NormalTok{,}\StringTok{"Tuanake"}\NormalTok{)),}
+  \AttributeTok{archipelago =} \FunctionTok{rep}\NormalTok{(}\StringTok{"Tuamotu"}\NormalTok{, }\DecValTok{64}\NormalTok{)}
+\NormalTok{)}
+
+\NormalTok{atolls\_gambier\_df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{island =} \FunctionTok{toupper}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"Tematangi"}\NormalTok{, }\StringTok{"Tureia"}\NormalTok{, }\StringTok{"Moruroa"}\NormalTok{, }\StringTok{"Fangataufa"}\NormalTok{,}
+                  \StringTok{"Vahanga"}\NormalTok{, }\StringTok{"Tenarunga"}\NormalTok{, }\StringTok{"Tenararo"}\NormalTok{, }\StringTok{"Vanavana"}\NormalTok{, }\StringTok{"Maturei vavao"}\NormalTok{,}
+                  \StringTok{"Maria est"}\NormalTok{, }\StringTok{"Marutea sud"}\NormalTok{, }\StringTok{"Temoe"}\NormalTok{, }\StringTok{"Morane"}\NormalTok{, }\StringTok{"Mangareva"}\NormalTok{,}
+                  \StringTok{"Banc portland"}\NormalTok{, }\StringTok{"Recif de la minerve"}\NormalTok{)),}
+  \AttributeTok{archipelago =} \FunctionTok{rep}\NormalTok{(}\StringTok{"Gambier"}\NormalTok{, }\DecValTok{16}\NormalTok{)}
+\NormalTok{)}
+
+\NormalTok{atolls\_societe\_df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{island =} \FunctionTok{toupper}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"Tahiti"}\NormalTok{, }\StringTok{"Moorea"}\NormalTok{, }\StringTok{"Maiao"}\NormalTok{, }\StringTok{"Tetiaroa"}\NormalTok{, }\StringTok{"Mehetia"}\NormalTok{,}
+                  \StringTok{"Huahine"}\NormalTok{, }\StringTok{"Raiatea{-}Tahaa"}\NormalTok{, }\StringTok{"Bora Bora"}\NormalTok{, }\StringTok{"Tupai"}\NormalTok{, }\StringTok{"Maupiti"}\NormalTok{,}
+                  \StringTok{"Maupihaa"}\NormalTok{, }\StringTok{"Motu One"}\NormalTok{, }\StringTok{"Manuae"}\NormalTok{)),}
+  \AttributeTok{archipelago =} \FunctionTok{rep}\NormalTok{(}\StringTok{"Société"}\NormalTok{, }\DecValTok{13}\NormalTok{)}
+\NormalTok{)}
+
+\NormalTok{atolls\_australes\_df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{island =} \FunctionTok{toupper}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"Maria"}\NormalTok{, }\StringTok{"Rimatara"}\NormalTok{, }\StringTok{"Rurutu"}\NormalTok{, }\StringTok{"Tubuai"}\NormalTok{, }\StringTok{"Raivavae"}\NormalTok{, }\StringTok{"Rapa"}\NormalTok{,}
+                  \StringTok{"Marotiri"}\NormalTok{,}\StringTok{"Banc president thiers"}\NormalTok{,}\StringTok{"Banc neilson"}\NormalTok{,}
+                  \StringTok{"Banc mac donald"}\NormalTok{, }\StringTok{"Recif arago"}\NormalTok{)),}
+  \AttributeTok{archipelago =} \FunctionTok{rep}\NormalTok{(}\StringTok{"Australes"}\NormalTok{, }\DecValTok{11}\NormalTok{)}
+\NormalTok{)}
+
+\NormalTok{atolls\_marquises\_df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{island =} \FunctionTok{toupper}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"Hatutaa"}\NormalTok{,}\StringTok{"Eiao"}\NormalTok{,}\StringTok{"Hatu Iti"}\NormalTok{,}\StringTok{"Nuku Hiva"}\NormalTok{,}\StringTok{"Ua Huka"}\NormalTok{,}\StringTok{"Ua Pou"}\NormalTok{, }
+                  \StringTok{"Fatu Huku"}\NormalTok{,}\StringTok{"Hiva Oa"}\NormalTok{, }\StringTok{"Fatu Hiva"}\NormalTok{, }\StringTok{"Tahuata"}\NormalTok{,}\StringTok{"Mohotani"}\NormalTok{,}
+                  \StringTok{"Motukua"}\NormalTok{,}\StringTok{"Rocher thomasset"}\NormalTok{,}\StringTok{"Motu nao"}\NormalTok{,}\StringTok{"Banc lawson"}\NormalTok{,}
+                  \StringTok{"Banc clark"}\NormalTok{,}\StringTok{"Motu one (Mar)"}\NormalTok{)),}
+  \AttributeTok{archipelago =} \FunctionTok{rep}\NormalTok{(}\StringTok{"Marquises"}\NormalTok{, }\DecValTok{17}\NormalTok{)}
+\NormalTok{)}
+
+\NormalTok{atolls }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(atolls\_tuamotu\_df, atolls\_gambier\_df, atolls\_societe\_df, }
+\NormalTok{                atolls\_australes\_df, atolls\_marquises\_df)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{nearest-island-and-archipelago.}{%
+\subparagraph{Nearest island and
+archipelago.}\label{nearest-island-and-archipelago.}}
+
+(\textasciitilde40 sec)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nearest\_island\_archipelago }\OtherTok{\textless{}{-}}\NormalTok{ sf}\SpecialCharTok{::}\FunctionTok{st\_nearest\_feature}\NormalTok{(dataset\_to\_sf, shp) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{as.data.frame}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\StringTok{"OBJECTID"} \OtherTok{=} \StringTok{"."}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{left\_join}\NormalTok{(shp, }\AttributeTok{by =} \StringTok{"OBJECTID"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\StringTok{"ILE"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\StringTok{"island"} \OtherTok{=} \StringTok{"ILE"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{left\_join}\NormalTok{(atolls, }\AttributeTok{by =} \StringTok{"island"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{merge-with-filtered-data-55}{%
+\paragraph{Merge with filtered data
+(5/5)}\label{merge-with-filtered-data-55}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{filtered\_data }\OtherTok{\textless{}{-}} \FunctionTok{cbind}\NormalTok{(filtered\_data, nearest\_island\_archipelago)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{filtering}{%
+\section{Filtering}\label{filtering}}
+
+\hypertarget{habitat-description}{%
+\subsection{Habitat description}\label{habitat-description}}
+
+We replace 0 by NA from habitat in order to simplify next calculus
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{valid\_basis\_of\_record }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"HUMAN\_OBSERVATION"}\NormalTok{, }\StringTok{"MACHINE\_OBSERVATION"}\NormalTok{, }\StringTok{"MATERIAL\_SAMPLE"}\NormalTok{, }\StringTok{"MATERIAL\_CITATION"}\NormalTok{, }\StringTok{"PRESERVED\_SPECIMEN"}\NormalTok{)}
+
+\NormalTok{filtered\_data }\OtherTok{\textless{}{-}}\NormalTok{ filtered\_data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{isMarine =} \FunctionTok{ifelse}\NormalTok{(isMarine }\SpecialCharTok{==} \DecValTok{0}\NormalTok{, }\ConstantTok{NA}\NormalTok{, isMarine),}
+         \AttributeTok{isBrackish =} \FunctionTok{ifelse}\NormalTok{(isBrackish }\SpecialCharTok{==} \DecValTok{0}\NormalTok{, }\ConstantTok{NA}\NormalTok{, isBrackish),}
+         \AttributeTok{isFreshwater =} \FunctionTok{ifelse}\NormalTok{(isFreshwater }\SpecialCharTok{==} \DecValTok{0}\NormalTok{, }\ConstantTok{NA}\NormalTok{, isFreshwater),}
+         \AttributeTok{isTerrestrial =} \FunctionTok{ifelse}\NormalTok{(isTerrestrial }\SpecialCharTok{==} \DecValTok{0}\NormalTok{, }\ConstantTok{NA}\NormalTok{, isTerrestrial)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{habitat =} \FunctionTok{case\_when}\NormalTok{(}
+\NormalTok{    isMarine }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isBrackish) }\SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isTerrestrial) }\SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isFreshwater) }\SpecialCharTok{\textasciitilde{}} \StringTok{"Marine"}\NormalTok{,}
+    \FunctionTok{is.na}\NormalTok{(isMarine) }\SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isBrackish) }\SpecialCharTok{\&}\NormalTok{ isTerrestrial }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isFreshwater) }\SpecialCharTok{\textasciitilde{}} \StringTok{"Terrestrial"}\NormalTok{,}
+    \FunctionTok{is.na}\NormalTok{(isMarine) }\SpecialCharTok{\&}\NormalTok{ isBrackish }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isTerrestrial) }\SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isFreshwater) }\SpecialCharTok{\textasciitilde{}} \StringTok{"Marine"}\NormalTok{,}
+    \FunctionTok{is.na}\NormalTok{(isMarine) }\SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isBrackish) }\SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isTerrestrial) }\SpecialCharTok{\&}\NormalTok{ isFreshwater }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\textasciitilde{}} \StringTok{"Freshwater"}\NormalTok{,}
+\NormalTok{    isMarine }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&}\NormalTok{ isBrackish }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isTerrestrial) }\SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isFreshwater) }\SpecialCharTok{\textasciitilde{}} \StringTok{"Marine"}\NormalTok{,}
+\NormalTok{    isMarine }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isBrackish) }\SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isTerrestrial) }\SpecialCharTok{\&}\NormalTok{ isFreshwater }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\textasciitilde{}} \StringTok{"Marine and Fresh"}\NormalTok{,}
+\NormalTok{    isMarine }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isBrackish) }\SpecialCharTok{\&}\NormalTok{ isTerrestrial }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isFreshwater) }\SpecialCharTok{\textasciitilde{}} \StringTok{"Marine and Terrestrial"}\NormalTok{,}
+    \FunctionTok{is.na}\NormalTok{(isMarine) }\SpecialCharTok{\&}\NormalTok{ isBrackish }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isTerrestrial) }\SpecialCharTok{\&}\NormalTok{ isFreshwater }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\textasciitilde{}} \StringTok{"Marine"}\NormalTok{,}
+    \FunctionTok{is.na}\NormalTok{(isMarine) }\SpecialCharTok{\&}\NormalTok{ isBrackish }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&}\NormalTok{ isTerrestrial }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isFreshwater) }\SpecialCharTok{\textasciitilde{}} \StringTok{"Brackish and Terrestrial"}\NormalTok{,}
+    \FunctionTok{is.na}\NormalTok{(isMarine) }\SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isBrackish) }\SpecialCharTok{\&}\NormalTok{ isTerrestrial }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&}\NormalTok{ isFreshwater }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\textasciitilde{}} \StringTok{"Fresh and Terrestrial"}\NormalTok{,}
+    \FunctionTok{is.na}\NormalTok{(isMarine) }\SpecialCharTok{\&}\NormalTok{ isBrackish }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&}\NormalTok{ isTerrestrial }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&}\NormalTok{ isFreshwater }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\textasciitilde{}} \StringTok{"Brackish, Fresh and Terrestrial"}\NormalTok{,}
+\NormalTok{    isMarine }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&}\NormalTok{ isBrackish }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isTerrestrial) }\SpecialCharTok{\&}\NormalTok{ isFreshwater }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\textasciitilde{}} \StringTok{"Marine"}\NormalTok{,}
+\NormalTok{    isMarine }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&}\NormalTok{ isBrackish }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&}\NormalTok{ isTerrestrial }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isFreshwater) }\SpecialCharTok{\textasciitilde{}} \StringTok{"Marine, Brackish and Terrestrial"}\NormalTok{,}
+\NormalTok{    isMarine }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&} \FunctionTok{is.na}\NormalTok{(isBrackish) }\SpecialCharTok{\&}\NormalTok{ isTerrestrial }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&}\NormalTok{ isFreshwater }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\textasciitilde{}} \StringTok{"Marine, Fresh and Terrestrial"}\NormalTok{,}
+\NormalTok{    isMarine }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&}\NormalTok{ isBrackish }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&}\NormalTok{ isTerrestrial }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\&}\NormalTok{ isFreshwater }\SpecialCharTok{==} \DecValTok{1} \SpecialCharTok{\textasciitilde{}} \StringTok{"Marine, Brackish, Fresh and Terrestrial"}\NormalTok{, }\ConstantTok{TRUE} \SpecialCharTok{\textasciitilde{}} \StringTok{"Undetermined"}
+\NormalTok{  ))}
+
+\NormalTok{filtered\_data }\OtherTok{\textless{}{-}}\NormalTok{ filtered\_data }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(year }\SpecialCharTok{\textgreater{}=} \DecValTok{1950}\NormalTok{,}
+\NormalTok{    occurrenceStatus }\SpecialCharTok{==} \StringTok{"PRESENT"}\NormalTok{,}
+\NormalTok{    basisOfRecord }\SpecialCharTok{\%in\%}\NormalTok{ valid\_basis\_of\_record) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{distinct}\NormalTok{(decimalLatitude, decimalLongitude, year, month, day, species, }\AttributeTok{.keep\_all =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(isMarine) }\SpecialCharTok{|} \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(isFreshwater) }\SpecialCharTok{|} \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(isBrackish) }\SpecialCharTok{|} \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(isTerrestrial))}
+\end{Highlighting}
+\end{Shaded}
+
+
+\end{document}

@@ -86,7 +86,7 @@ plot_ideal_sampling <- function(data, habitat, occurrence_threshold, n_tot, n_oc
   # Filtrer les données en fonction de l'habitat spécifié
   filtered_data <- data %>%
     filter(Habitat == habitat,
-           !is.na(class)) 
+           !is.na(phylum)) 
 
   # Résumé des données en regroupant par archipel et niveau taxonomique
   summary_data <- filtered_data %>%
@@ -97,20 +97,18 @@ plot_ideal_sampling <- function(data, habitat, occurrence_threshold, n_tot, n_oc
     mutate(Difference = nbocc - idealsampling, .by ="class") %>%
     filter(!is.na(nbocc) & nbocc >= occurrence_threshold) %>%
     mutate(bar_order = ifelse(Difference > 0, "Over-representation", "Under-representation"))
-
-  print(hist(summary_data$Difference))
   
   # Créer le graphique
-  ggplot(summary_data, aes(x = fct_reorder(class, Difference), y = Difference)) + 
+  ggplot(summary_data, aes(x = fct_reorder(phylum, Difference), y = asinh(Difference))) + 
     geom_bar(stat = "identity", aes(fill = bar_order), position = "stack") +
     scale_fill_manual(values = c("Over-representation" = "#1b9e77", "Under-representation" = "#d95f02"), name = "") +
     coord_flip() + 
-    labs(title = "Difference from Ideal Sampling",
+    labs(title = "",
          x = "Class",  # Modifier le label de l'axe x
          y = "Occurrences") +
     theme_minimal() +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
-    facet_wrap(~Archipel)
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) 
+  #+ facet_wrap(~Archipel)
 }
 
 # Exemple d'utilisation de la fonction avec le niveau taxonomique "phylum"
@@ -120,9 +118,10 @@ ter <- plot_ideal_sampling(working_dataset, habitat = "Terrestrial", occurrence_
 
 # all <- plot_ideal_sampling(working_dataset, habitat = c("Terrestrial","Marine"), occurrence_threshold = 100, n_tot = 6675, n_occ = 120655)
 
-plot_grid <- cowplot::plot_grid(mar, ter, ncol = 2, align = "hv")
+# plot_grid <- cowplot::plot_grid(mar, ter, ncol = 2, align = "hv")
 
-# ggsave("figure2_arc_ter.jpeg", ter, width = 10, height = 6, dpi = 600)
+ggsave("figure2_ter.jpeg", ter, width = 10, height = 6, dpi = 600)
+ggsave("figure2_mer.jpeg", mar, width = 10, height = 6, dpi = 600)
 ```
 
 # Figure 3
@@ -328,7 +327,5 @@ gam_sa_t <- fig4_plot_function_sampbias(gamq1, gamq1$Terrestrial_sampbias, gamq1
 
 library(patchwork)
 sampbias_plot <- aus_sa + aus_sa_t + gam_sa + gam_sa_t + mar_sa + mar_sa_t + soc_sa + soc_sa_t + tua_sa + tua_sa_t + plot_layout(guides = "collect", ncol = 2, nrow = 5)
-
-
 ```
 
