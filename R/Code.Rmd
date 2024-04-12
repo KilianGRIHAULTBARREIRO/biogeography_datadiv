@@ -8,6 +8,8 @@ output:
 ---
 
 ```{r Packages, message=FALSE, warning=FALSE}
+# remotes::install_github("Rekyt/rtaxref")
+# install.packages(c("rtaxref","rgbif",""worrms")
 library(tidyverse)
 library(devtools)
 library(rtaxref)
