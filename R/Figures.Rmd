@@ -23,8 +23,8 @@ library(patchwork)
 
 # Data needed :
 ```{r}
-working_dataset <- read.csv2(here("./data/dataset_V5.csv"))
-atolls <- read.csv2(here("./data/atolls.csv"))
+working_dataset <- read.csv(file = "C:/Users/Kilian/Documents/GitHub/biogeography_datadiv/Data/05_Filtered_data.csv")
+atolls <- read.csv2("C:/Users/Kilian/Desktop/Biogeography Kilian/old/atolls.csv")
 ```
 
 
@@ -59,30 +59,35 @@ nodes <- data.frame(
 links$IDsource <- match(links$source, nodes$name)-1 
 links$IDtarget <- match(links$target, nodes$name)-1
 
-nodes$group <- as.factor(c( "A", "A", "A", "A", "A", "A", "B", "B", "B", "B", "B", "A", "A", "B")) 
+# Add a 'group' column to each connection:
+nodes$group <- as.factor(c("a", "b", "c","d", "e", "f", "g", "h", "i", "j", "k", "l","m","n"))
+ 
+# Add a 'group' column to each node. Here I decide to put all of them in the same group to make them grey
+links$group <- as.factor(c("a1", "b1", "c1","d1", "e1", "f1", "g1", "h1", "i1", "j1", "k1", "l1","m1"))
 
-links$group <- as.factor(c( "a","b", "a", "b", "a", "b", "b", "a", "a", "b", "a", "a", "b"))
+# Give a color for each group:
+my_color <- 'd3.scaleOrdinal() .domain(["a", "b", "c","d", "e", "f", "g", "h", "i", "j", "k", "l","m","n","a1", "b1", "c1","d1", "e1", "f1", "g1", "h1", "i1", "j1", "k1", "l1","m1"]) .range(["darkbrown", "#7D6608", "#9A7D0A", "#B7950B", "#D4AC0D", "#F1C40F", "#7D6608","#9A7D0A","#B7950B", "#D4AC0D", "#F4D03F", "#F7DC6F", "#F9E79F", "#FCF3CF", "#2471A3","#2471A3","#2980B9","#2980B9","#5499C7","#5499C7","#7FB3D5","#7FB3D5","#A9CCE3","#A9CCE3","#D4E6F1","#D4E6F1","#D4E6F1"])'
 
-my_color <- 'd3.scaleOrdinal() .domain(["a","b","A","B"]) .range(["#fdc30a","steelblue", "#daa520" ,"#4a9ac6"])'
-
-# Make the Network
-p <- networkD3::sankeyNetwork(Links = links, Nodes = nodes,
-              Source = "IDsource", Target = "IDtarget",
-              Value = "value", colourScale=my_color, LinkGroup="group", NodeGroup="group", NodeID = "name", 
-              sinksRight=FALSE, fontSize = 13, width = 1000, height = 200, nodeWidth = 5, nodePadding = 20)
+# Appliquer les couleurs aux nœuds dans le graphique
+p <- networkD3::sankeyNetwork(Links = links, Nodes = nodes, 
+                              Source = "IDsource", Target = "IDtarget",
+                              Value = "value", NodeID = "name", 
+                   colourScale=my_color, LinkGroup="group", NodeGroup="group",
+                   fontSize = 15, fontFamily = 10)
 p
+
 
 
 # save the widget
 # library(htmlwidgets)
-# saveWidget(p, file=paste0( getwd(), "/sankeyBasic1.html"))
+htmlwidgets::saveWidget(p, file=paste0( getwd(), "/sankeyBasic1.html"))
 ```
 
 
 # FIGURE 2 : Over and under representation.
 
 ```{r}
-plot_ideal_sampling <- function(data, habitat, occurrence_threshold, n_tot, n_occ) {
+plot_ideal_sampling <- function(data, Habitat, occurrence_threshold, n_tot, n_occ) {
   # Filtrer les données en fonction de l'habitat spécifié
   filtered_data <- data %>%
     filter(Habitat == habitat,
@@ -92,7 +97,7 @@ plot_ideal_sampling <- function(data, habitat, occurrence_threshold, n_tot, n_oc
   summary_data <- filtered_data %>%
     mutate(
       nbocc = n(),
-      idealsampling = n_occ * n_distinct(ScientificName) / n_tot,
+      idealsampling = n_occ * n_distinct(species) / n_tot,
       .by = c("class")) %>%
     mutate(Difference = nbocc - idealsampling, .by ="class") %>%
     filter(!is.na(nbocc) & nbocc >= occurrence_threshold) %>%
@@ -112,9 +117,9 @@ plot_ideal_sampling <- function(data, habitat, occurrence_threshold, n_tot, n_oc
 }
 
 # Exemple d'utilisation de la fonction avec le niveau taxonomique "phylum"
-mar <- plot_ideal_sampling(working_dataset, habitat = "Marine", occurrence_threshold = 100, n_tot = 5738, n_occ = 110890)
+mar <- plot_ideal_sampling(working_dataset, Habitat = "Marine", occurrence_threshold = 100, n_tot = 5738, n_occ = 110890)
 
-ter <- plot_ideal_sampling(working_dataset, habitat = "Terrestrial", occurrence_threshold = 10, n_tot = 980, n_occ = 9765)
+ter <- plot_ideal_sampling(working_dataset, Habitat = "Terrestrial", occurrence_threshold = 10, n_tot = 980, n_occ = 9765)
 
 # all <- plot_ideal_sampling(working_dataset, habitat = c("Terrestrial","Marine"), occurrence_threshold = 100, n_tot = 6675, n_occ = 120655)
 
@@ -327,5 +332,84 @@ gam_sa_t <- fig4_plot_function_sampbias(gamq1, gamq1$Terrestrial_sampbias, gamq1
 
 library(patchwork)
 sampbias_plot <- aus_sa + aus_sa_t + gam_sa + gam_sa_t + mar_sa + mar_sa_t + soc_sa + soc_sa_t + tua_sa + tua_sa_t + plot_layout(guides = "collect", ncol = 2, nrow = 5)
+```
+
+
+#Bonus TESTS
+```{r}
+filtered_data_per <- filtered_data %>%
+  dplyr::filter(basisOfRecord %in% c("PRESERVED_SPECIMEN", "HUMAN_OBSERVATION", "MACHINE_OBSERVATION", "MATERIAL_CITATION", "MATERIAL_SAMPLE"))
+
+# Créer un tableau croisé
+table_liens <- table(filtered_data_per$basisOfRecord, filtered_data_per$taxonRank) 
+
+table_liens[,8] <- table_liens[,8] + table_liens[,9]
+table_liens <- table_liens[,-c(3,5,9,10,11)]
+table_liens <- table_liens[,c(5,1,4,2,3,6)]
+
+table_liens <- t(table_liens)
+table_liens <- table_liens[,c(1,5,4,2,3)]
+# Visualiser le tableau croisé
+print(table_liens)
+
+# Calculer les pourcentages par ligne
+table_liens_percentages <- prop.table(table_liens, margin = 2)
+
+# Visualiser les pourcentages par ligne
+print(table_liens_percentages)
+
+# Tracer les barplots
+# Définir les noms de colonnes en anglais dans le bon ordre
+rownames(table_liens_percentages) <- c("Phylum", "Class", "Order", "Family", "Genus",  "Species")
+colnames(table_liens_percentages) <- c("Human_observation", "Preserved_speciment", "Material_sample", "Machine_observation", "Material_citation")
+
+# Utiliser une palette de couleurs pour les barres
+palette <- RColorBrewer::brewer.pal(n = nrow(table_liens_percentages), name = "Set3")
+
+
+# Tracer les barplots avec les nouvelles couleurs et légende ajustée
+barplot(table_liens_percentages, beside = TRUE,
+        main = "Percentage of taxonomic rank by basis of record",
+        xlab = "Recording method", ylab = "Percentage", col = palette,
+        legend.text = rownames(table_liens_percentages),
+        cex.names = 0.6,
+        args.legend = list(cex = 0.8, x = 23, y = 1))
+```
+INTRICATED DONUTS
+```{r}
+not_valid_data <- not_valid_data %>%
+  mutate(isMarine = ifelse(isMarine == 0, NA, isMarine),
+         isBrackish = ifelse(isBrackish == 0, NA, isBrackish),
+         isFreshwater = ifelse(isFreshwater == 0, NA, isFreshwater),
+         isTerrestrial = ifelse(isTerrestrial == 0, NA, isTerrestrial)) %>%
+  mutate(habitat = case_when(
+    isMarine == 1 & is.na(isBrackish) & is.na(isTerrestrial) & is.na(isFreshwater) ~ "Marine",
+    is.na(isMarine) & is.na(isBrackish) & isTerrestrial == 1 & is.na(isFreshwater) ~ "Terrestrial",
+    is.na(isMarine) & isBrackish == 1 & is.na(isTerrestrial) & is.na(isFreshwater) ~ "Marine",
+    is.na(isMarine) & is.na(isBrackish) & is.na(isTerrestrial) & isFreshwater == 1 ~ "Freshwater",
+    isMarine == 1 & isBrackish == 1 & is.na(isTerrestrial) & is.na(isFreshwater) ~ "Marine",
+    isMarine == 1 & is.na(isBrackish) & is.na(isTerrestrial) & isFreshwater == 1 ~ "Marine and Fresh",
+    isMarine == 1 & is.na(isBrackish) & isTerrestrial == 1 & is.na(isFreshwater) ~ "Marine and Terrestrial",
+    is.na(isMarine) & isBrackish == 1 & is.na(isTerrestrial) & isFreshwater == 1 ~ "Marine",
+    is.na(isMarine) & isBrackish == 1 & isTerrestrial == 1 & is.na(isFreshwater) ~ "Brackish and Terrestrial",
+    is.na(isMarine) & is.na(isBrackish) & isTerrestrial == 1 & isFreshwater == 1 ~ "Fresh and Terrestrial",
+    is.na(isMarine) & isBrackish == 1 & isTerrestrial == 1 & isFreshwater == 1 ~ "Brackish, Fresh and Terrestrial",
+    isMarine == 1 & isBrackish == 1 & is.na(isTerrestrial) & isFreshwater == 1 ~ "Marine",
+    isMarine == 1 & isBrackish == 1 & isTerrestrial == 1 & is.na(isFreshwater) ~ "Marine, Brackish and Terrestrial",
+    isMarine == 1 & is.na(isBrackish) & isTerrestrial == 1 & isFreshwater == 1 ~ "Marine, Fresh and Terrestrial",
+    isMarine == 1 & isBrackish == 1 & isTerrestrial == 1 & isFreshwater == 1 ~ "Marine, Brackish, Fresh and Terrestrial", TRUE ~ "Undetermined"
+  ))
+
+ID_marine <- marine_data %>% group_by(archipelago,taxonRank) %>% summarise(n = n()) %>% filter(!is.na(taxonRank)) %>% na.omit()
+
+webr::PieDonut(ID_marine, aes(archipelago,taxonRank, count=n),
+               explode = c(5,1,2,3),
+               title = "Marine")
+
+ID_terrestrial <- terrestrial_data %>% group_by(archipelago,taxonRank) %>% summarise(n = n()) %>% filter(!is.na(taxonRank)) %>% na.omit()
+
+webr::PieDonut(ID_terrestrial, aes(archipelago,taxonRank, count=n),
+               explode = c(5,1,2,3),
+               title = "Terrestrial")
 ```
 

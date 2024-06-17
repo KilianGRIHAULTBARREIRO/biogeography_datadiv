@@ -42,14 +42,14 @@ filtered_data <- data.table::fread(file_adress,
 # Curation & Reliability
 ## Taxonomic checking and Habitat.
 We take all the species present in the dataset. 
-We modify the worrms::wm_records_name() function to avoid an error when the 
-specie name is not recognized. 
 ```{r Taxonomic status}
 scientificName_list <- unique(filtered_data$species) %>%
   stats::na.omit()
 ```
 
 ### WoRMS
+We modify the worrms::wm_records_name() function to avoid an error when the 
+specie name is not recognized. 
 Worms_filtered object is a df with all the names
 recognized by WoRMS, be aware that the computation is energy-intensive 
 (~ 87 min for 6535 species), 
@@ -256,21 +256,21 @@ atolls_gambier_df <- data.frame(
                   "Vahanga", "Tenarunga", "Tenararo", "Vanavana", "Maturei vavao",
                   "Maria est", "Marutea sud", "Temoe", "Morane", "Mangareva",
                   "Banc portland", "Recif de la minerve")),
-  archipelago = rep("Gambier", 16)
+  archipelago = rep("Gambiers", 16)
 )
 
 atolls_societe_df <- data.frame(
   island = toupper(c("Tahiti", "Moorea", "Maiao", "Tetiaroa", "Mehetia",
                   "Huahine", "Raiatea-Tahaa", "Bora Bora", "Tupai", "Maupiti",
                   "Maupihaa", "Motu One", "Manuae")),
-  archipelago = rep("Société", 13)
+  archipelago = rep("Society", 13)
 )
 
 atolls_australes_df <- data.frame(
   island = toupper(c("Maria", "Rimatara", "Rurutu", "Tubuai", "Raivavae", "Rapa",
                   "Marotiri","Banc president thiers","Banc neilson",
                   "Banc mac donald", "Recif arago")),
-  archipelago = rep("Australes", 11)
+  archipelago = rep("Australs", 11)
 )
 
 atolls_marquises_df <- data.frame(
@@ -278,7 +278,7 @@ atolls_marquises_df <- data.frame(
                   "Fatu Huku","Hiva Oa", "Fatu Hiva", "Tahuata","Mohotani",
                   "Motukua","Rocher thomasset","Motu nao","Banc lawson",
                   "Banc clark","Motu one (Mar)")),
-  archipelago = rep("Marquises", 17)
+  archipelago = rep("Marquesas", 17)
 )
 
 atolls <- rbind(atolls_tuamotu_df, atolls_gambier_df, atolls_societe_df, 
@@ -299,7 +299,8 @@ nearest_island_archipelago <- sf::st_nearest_feature(dataset_to_sf, shp) %>%
 
 #### Merge with filtered data (5/5)
 ```{r}
-filtered_data <- cbind(filtered_data, nearest_island_archipelago)
+filtered_data <- cbind(filtered_data, nearest_island_archipelago) %>%
+  dplyr::mutate(archipelago = ifelse(island == "MOTU ONE (Mar)", "Marquesas", archipelago))
 ```
 
 # Filtering
@@ -309,7 +310,7 @@ We replace 0 by NA from habitat in order to simplify next calculus
 valid_basis_of_record <- c("HUMAN_OBSERVATION", "MACHINE_OBSERVATION", "MATERIAL_SAMPLE", "MATERIAL_CITATION", "PRESERVED_SPECIMEN")
 
 filtered_data <- filtered_data %>%
-  mutate(isMarine = ifelse(isMarine == 0, NA, isMarine),
+  dplyr::mutate(isMarine = ifelse(isMarine == 0, NA, isMarine),
          isBrackish = ifelse(isBrackish == 0, NA, isBrackish),
          isFreshwater = ifelse(isFreshwater == 0, NA, isFreshwater),
          isTerrestrial = ifelse(isTerrestrial == 0, NA, isTerrestrial)) %>%
