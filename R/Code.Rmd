@@ -9,7 +9,7 @@ output:
 
 ```{r Packages, message=FALSE, warning=FALSE}
 # remotes::install_github("Rekyt/rtaxref")
-# install.packages(c("rtaxref","rgbif",""worrms")
+# install.packages(c("rgbif",""worrms"))
 library(tidyverse)
 library(devtools)
 library(rtaxref)
@@ -270,7 +270,7 @@ atolls_australes_df <- data.frame(
   island = toupper(c("Maria", "Rimatara", "Rurutu", "Tubuai", "Raivavae", "Rapa",
                   "Marotiri","Banc president thiers","Banc neilson",
                   "Banc mac donald", "Recif arago")),
-  archipelago = rep("Australs", 11)
+  archipelago = rep("Austral", 11)
 )
 
 atolls_marquises_df <- data.frame(
@@ -340,6 +340,17 @@ filtered_data <- filtered_data %>%
   dplyr::filter(!is.na(isMarine) | !is.na(isFreshwater) | !is.na(isBrackish) | !is.na(isTerrestrial))
 ```
 
+
+```{r}
+filtered_data <- filtered_data %>%
+  mutate(
+    habitat = if_else(species %in% c("Opogona aurisquamosa", "Tryngites subruficollis"), "Terrestrial", habitat),
+    isBrackish = if_else(species %in% c("Opogona aurisquamosa", "Tryngites subruficollis"), NA, isBrackish),
+    isFreshwater = if_else(species %in% c("Opogona aurisquamosa", "Tryngites subruficollis"), NA, isFreshwater),
+    isMarine = if_else(species %in% c("Opogona aurisquamosa", "Tryngites subruficollis"), NA, isMarine),
+    isTerrestrial = if_else(species %in% c("Opogona aurisquamosa", "Tryngites subruficollis"), 1, isTerrestrial)
+  )
+```
 
 
 
